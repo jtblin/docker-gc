@@ -1,0 +1,31 @@
+---
+# Requires DaemonSets extension (from v1.1): http://kubernetes.io/v1.1/docs/admin/daemons.html
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  name: docker-gc
+  namespace: kube-system
+  labels:
+    app: docker-gc
+    version: v1
+spec:
+  template:
+    metadata:
+      labels:
+        name: docker-gc
+        version: v1
+    spec:
+      containers:
+        - image: jtblin/docker-gc:latest
+          name: docker-gc
+          resources:
+            limits:
+              cpu: 0.1
+              memory: 10Mi
+          volumeMounts:
+            - name: docker-socket
+              mountPath: /var/run/docker.sock
+      volumes:
+        - name: docker-socket
+          hostPath:
+            path: /var/run/docker.sock
