@@ -1,0 +1,3 @@
+#!/bin/sh
+docker rm $(docker ps -a -f 'status=exited' -q) || true
+docker rmi $(docker images -f 'dangling=true' -q) || true
